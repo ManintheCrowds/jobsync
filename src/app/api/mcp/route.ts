@@ -36,7 +36,12 @@ async function handler(req: Request): Promise<Response> {
 
   const { userId, tokenName } = auth;
 
-  const server = new McpServer({ name: "jobsync", version: "1.0.0" });
+  const server = new McpServer(
+    { name: "jobsync", version: "1.0.0" },
+    // Counts array elements and object keys in tools/call arguments.
+    // Off by default; required for CVE-2026-111768 / GHSA-46jr-4wx8-v453.
+    { maxToolInputElements: 10_000 },
+  );
 
   server.tool(
     "add_job",
@@ -125,6 +130,8 @@ async function handler(req: Request): Promise<Response> {
   const transport = new WebStandardStreamableHTTPServerTransport({
     sessionIdGenerator: undefined, // stateless mode
     enableJsonResponse: true, // return plain JSON instead of SSE stream
+    // SDK default is 4 MiB. Keep it explicit so a later default change is visible.
+    maxRequestBodySize: 4 * 1024 * 1024,
   });
 
   await server.connect(transport);
