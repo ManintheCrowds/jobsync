@@ -41,7 +41,7 @@ This project follows a [Code of Conduct](./CODE_OF_CONDUCT.md). By participating
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22.23.4, or a later fixed release (24.22.1+ or 26.12.1+). Node 18 and 20 are not supported.
 - npm
 - Git
 
